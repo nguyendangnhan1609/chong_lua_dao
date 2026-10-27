@@ -19,7 +19,10 @@ export function load() {
       const raw = s.getItem(KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length) return parsed;
+        if (Array.isArray(parsed)) {
+          const ok = parsed.filter((w) => w && typeof w === 'object' && w.id);
+          if (ok.length) return ok;
+        }
       }
     } catch { /* dữ liệu hỏng: dùng mẫu */ }
   }
@@ -57,4 +60,26 @@ export function update(id, fn) {
 export function addLog(wf, text) {
   wf.log = wf.log || [];
   wf.log.push({ at: new Date().toISOString().slice(0, 10), text });
+}
+
+export function add(wf) {
+  const list = load();
+  list.push(wf);
+  save(list);
+  return wf;
+}
+
+// Hồ sơ doanh nghiệp đang chọn (chỉ là id, lưu riêng; mất khi id không còn trong dữ liệu).
+const SEL_KEY = 'chinhchu-demo-biz-sel';
+let selMemory = '';
+export function getSelectedId() {
+  const s = storage();
+  let id = selMemory;
+  if (s) { try { id = s.getItem(SEL_KEY) || id; } catch { /* dùng bộ nhớ */ } }
+  return id;
+}
+export function setSelectedId(id) {
+  selMemory = id || '';
+  const s = storage();
+  if (s) { try { if (id) s.setItem(SEL_KEY, id); else s.removeItem(SEL_KEY); } catch { /* bỏ qua */ } }
 }
