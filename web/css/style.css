@@ -64,3 +64,57 @@ input, select, textarea { width: 100%; min-height: 40px; padding: 8px 12px; bord
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ---- T2: tra cứu, báo cáo, huy hiệu, trang mẫu ---- */
+.muted { color: var(--gray); margin: 0 0 8px; overflow-wrap: anywhere; }
+.note { font-size: 14px; color: var(--gray); margin: 8px 0 0; }
+label { display: block; font-weight: 600; font-size: 14px; margin: 8px 0; }
+label select, label textarea { margin-top: 4px; font-weight: 400; }
+.sform { position: relative; }
+.srow { display: flex; gap: 8px; }
+.srow input { flex: 1 1 auto; min-width: 0; }
+.srow button { flex: 0 0 auto; }
+.sug { list-style: none; margin: 6px 0 0; padding: 0; border: 1px solid #c3d0dc; border-radius: 10px; overflow: hidden; background: #fff; }
+.sug[hidden] { display: none; }
+.sug button, .pick a {
+  display: flex; flex-direction: column; align-items: flex-start; width: 100%; min-height: 44px; padding: 6px 12px;
+  background: #fff; color: var(--text); text-align: left; text-decoration: none; border-radius: 0; font-size: 15px; font-weight: 400;
+}
+.sug button:hover, .pick a:hover { background: var(--blue-100); color: var(--text); }
+.sug b, .pick b { font-size: 15px; } .sug span, .pick span { font-size: 14px; color: var(--gray); overflow-wrap: anywhere; }
+.pick { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.pick a { border: 1px solid var(--blue-100); border-radius: 10px; }
+.status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 8px; border-radius: 999px; font-weight: 700; font-size: 14px; }
+.st-unverified { background: var(--gray-100); color: var(--gray); }
+.st-low { background: var(--blue-100); color: var(--blue-700); }
+.st-high { background: var(--blue-900); color: #fff; }
+.st-suspect { background: var(--orange-100); color: var(--orange); }
+.report h1 { margin: 8px 0 4px; overflow-wrap: anywhere; }
+.score { font-size: 14px; } .score b { font-size: 32px; color: var(--blue-900); }
+.bar { height: 12px; background: var(--gray-100); border-radius: 999px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--blue-500), var(--blue-900)); border-radius: 999px; transition: width .5s; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.check { border-left: 4px solid var(--blue-500); padding: 2px 0 2px 10px; font-size: 15px; overflow-wrap: anywhere; }
+.check-head { display: flex; justify-content: space-between; gap: 8px; }
+.pts { font-weight: 700; color: var(--blue-900); white-space: nowrap; }
+.check-meta { font-size: 14px; color: var(--gray); }
+.card.warn { border-left: 5px solid var(--orange); background: var(--orange-100); }
+.card.ai { border: 1px dashed var(--blue-500); }
+.cform { margin-top: 12px; } .thanks { background: var(--blue-100); padding: 10px 12px; border-radius: 10px; }
+a.btn { display: inline-flex; align-items: center; text-decoration: none; }
+.vbadge { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; min-width: 40px; padding: 0 6px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 600; color: var(--text); transition: transform .15s, background .2s; }
+.vbadge:hover { background: var(--blue-100); transform: scale(1.06); }
+.vb-suspect { color: var(--orange); } .vb-unverified { color: var(--gray); }
+.legend { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 0; font-size: 14px; }
+.legend li { display: flex; align-items: center; gap: 6px; }
+.mock { padding: 0; overflow: hidden; }
+.mock-bar { display: flex; align-items: center; gap: 5px; padding: 8px 10px; background: var(--gray-100); font-size: 14px; }
+.mock-bar i { width: 10px; height: 10px; border-radius: 50%; background: #c3ccd5; flex: none; }
+.mock-bar span { margin-left: 6px; color: var(--gray); overflow-wrap: anywhere; }
+.mock-body { padding: 12px 16px; }
+.mock-head { display: flex; align-items: center; gap: 10px; }
+.mock-logo { width: 44px; height: 44px; flex: none; border-radius: 50%; background: var(--blue-500); color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 20px; }
+.mock-title { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; min-width: 0; } .mock-title strong { overflow-wrap: anywhere; }
+.mock-nav { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; font-size: 14px; }
+.mock-nav li { padding: 4px 10px; background: var(--blue-50); border-radius: 999px; }
+.mock-note { margin: 0; padding: 8px 16px 12px; font-size: 14px; color: var(--gray); }
