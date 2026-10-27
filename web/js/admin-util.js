@@ -1,6 +1,7 @@
 // Hàm thuần cho màn Quản trị: lọc hàng đợi, kiểm tra quy tắc và áp dụng hành động lên hồ sơ.
 // applyAction KHÔNG sửa wf gốc: trả {ok, reason, wf} với wf là bản sao đã cập nhật (hoặc wf gốc khi bị từ chối).
 import { MAX_POINTS, computeStatus, canUpgrade, isSuspect, inspectionPassed } from './scoring.js';
+import { stamp, dateOnly } from './time-util.js';
 
 export const FILTERS = [
   { key: 'all', label: 'Tất cả' },
@@ -48,11 +49,7 @@ export function countByFilter(list) {
   return out;
 }
 
-const pad = (n) => String(n).padStart(2, '0');
-export function stamp(now = new Date()) {
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-}
-const dateOnly = (now = new Date()) => stamp(now).slice(0, 10);
+export { stamp } from './time-util.js';
 const validDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(String(s || '')) && !Number.isNaN(Date.parse(s));
 
 // Trạng thái từng nút: {enabled, reason} – dùng chung cho UI và applyAction.

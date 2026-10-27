@@ -78,7 +78,7 @@ export function render(container) {
 
   const quick = list(STEPS.map(([t, href, d]) => {
     const w = el('span');
-    const a = el('a', t); a.href = href; a.style.fontWeight = '600';
+    const a = el('a', t, 'quick-link'); a.href = href; a.style.fontWeight = '600';
     w.append(a, document.createElement('br'), d);
     return w;
   }), 'ol', 'todo');

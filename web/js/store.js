@@ -1,4 +1,5 @@
 import { createSampleData } from './data.js';
+import { stamp } from './time-util.js';
 
 const KEY = 'chinhchu-demo-v1';
 let memory = null; // fallback khi localStorage lỗi hoặc không có
@@ -59,7 +60,7 @@ export function update(id, fn) {
 
 export function addLog(wf, text) {
   wf.log = wf.log || [];
-  wf.log.push({ at: new Date().toISOString().slice(0, 10), text });
+  wf.log.push({ at: stamp(), text });
 }
 
 export function add(wf) {
