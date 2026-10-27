@@ -172,3 +172,27 @@ input[aria-invalid="true"] { border-color: #b3261e; }
 .toast.bad { background: #8a3a00; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+/* ---- T5: tinh chỉnh toàn cục ---- */
+:root { --shadow-hover: 0 6px 18px rgba(7, 64, 110, .18); }
+main > * { animation: page-in .28s ease both; }
+@keyframes page-in { from { opacity: 0; transform: translateX(10px); } to { opacity: 1; transform: none; } }
+.card { transition: box-shadow .2s, transform .2s; }
+a.qcard, .pick a { transition: box-shadow .2s, transform .15s, background .2s; }
+a.qcard:hover, .pick a:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+a.qcard:active, .pick a:active { transform: scale(.99); }
+button:hover:not(:disabled) { box-shadow: var(--shadow); }
+:focus-visible { outline: 3px solid var(--blue-500); outline-offset: 2px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--blue-700); }
+main a:not(.btn):not(.qcard):not(.vbadge):not(.back) { color: var(--blue-700); text-underline-offset: 2px; }
+.topbar { min-width: 0; }
+.topbar nav a { padding: 0 10px; }
+.roles a { min-width: 0; }
+@media (max-width: 400px) {
+  .brand { font-size: 17px; }
+  .topbar nav a { padding: 0 8px; }
+}
+img, svg { max-width: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  main > *, .card, .qcard, .vbadge { animation: none !important; transition: none !important; transform: none !important; }
+}

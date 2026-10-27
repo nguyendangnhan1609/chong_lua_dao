@@ -198,7 +198,7 @@ export function badgeAvailability(wf) {
   return { ok: false, status, reason: low.ok ? 'Hồ sơ đủ điều kiện nhưng chờ quản trị viên cấp mức thấp.' : `Chưa có huy hiệu: ${low.reason}` };
 }
 
-// Đoạn mã nhúng (đã escape giá trị), baseUrl dạng "https://host/path/" hoặc "https://host/".
+// Đoạn mã nhúng (đã escape giá trị), baseUrl là địa chỉ gốc có dấu / ở cuối.
 export function embedCode(baseUrl, wf, status) {
   const label = status === 'high' ? 'Đã xác thực thực tế' : 'Đã xác thực từ xa';
   const href = `${String(baseUrl).replace(/#.*$/, '')}#/tra-cuu/${encodeURIComponent(wf.id)}`;
