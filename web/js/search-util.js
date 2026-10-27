@@ -42,7 +42,7 @@ export function resolve(list, query) {
   const raw = lower(query);
   if (!normalize(query)) return { type: 'empty', wf: null, matches: [] };
   const d = normalizeDomain(query);
-  const byId = list.find((w) => w.id.toLowerCase() === raw);
+  const byId = list.find((w) => lower(w.id) === raw);
   if (byId) return { type: 'exact', wf: byId, matches: [byId] };
   const byDomain = list.find((w) => normalizeDomain(w.domain) === d);
   if (byDomain) return { type: 'exact', wf: byDomain, matches: [byDomain] };

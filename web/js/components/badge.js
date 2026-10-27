@@ -1,12 +1,9 @@
 // Huy hiệu tick dùng chung (SVG nội tuyến). Trả về chuỗi HTML an toàn (nội dung tĩnh, id được escape).
 import { esc } from '../search-util.js';
+import { STATUS_LABELS } from '../scoring.js';
 
-export const BADGE_TEXT = {
-  unverified: 'Chưa xác thực',
-  low: 'Đã xác thực từ xa',
-  high: 'Đã xác thực thực tế',
-  suspect: 'Nghi ngờ',
-};
+// Dùng chung nhãn với báo cáo (scoring.STATUS_LABELS) để không lệch chữ.
+export const BADGE_TEXT = STATUS_LABELS;
 
 const ICONS = {
   unverified: '<circle cx="14" cy="14" r="12" fill="#eef1f4" stroke="#6b7785" stroke-width="2"/><path d="M9 14h10" stroke="#6b7785" stroke-width="2.4" stroke-linecap="round"/>',

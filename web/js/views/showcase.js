@@ -12,13 +12,15 @@ const MOCKS = [
 
 export function renderMock(m, wf) {
   const status = computeStatus(wf);
-  const url = m.kind === 'fanpage' ? `social.example/${wf.domain.split('.')[0]}` : wf.domain;
+  const dom = String(wf.domain || '');
+  const url = m.kind === 'fanpage' ? `social.example/${dom.split('.')[0]}` : dom;
+  const name = String(wf.name || dom || wf.id || '?');
   return `<article class="card mock" data-wf="${esc(wf.id)}">
     <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><span>${esc(url)}</span></div>
     <div class="mock-body">
       <div class="mock-head">
-        <div class="mock-logo" aria-hidden="true">${esc(wf.name.charAt(0))}</div>
-        <div class="mock-title"><strong>${esc(wf.name)}</strong>${badgeLink(status, wf.id, { label: false })}</div>
+        <div class="mock-logo" aria-hidden="true">${esc(name.charAt(0))}</div>
+        <div class="mock-title"><strong>${esc(name)}</strong>${badgeLink(status, wf.id, { label: false })}</div>
       </div>
       <p>${esc(m.tagline)}</p>
       <ul class="mock-nav">${m.items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
@@ -28,7 +30,7 @@ export function renderMock(m, wf) {
 }
 
 export function render(container) {
-  const cards = MOCKS.map((m) => { const wf = getById(m.id); return wf ? renderMock(m, wf) : ''; }).join('');
+  const cards = MOCKS.map((m) => { const wf = getById(m.id); return wf && typeof wf === 'object' ? renderMock(m, wf) : ''; }).join('');
   const legend = Object.keys(BADGE_TEXT).map((s) => `<li>${badgeSvg(s, 22)}<span>${esc(BADGE_TEXT[s])}</span></li>`).join('');
   const wrap = document.createElement('section');
   wrap.innerHTML = `<h1>Trang web mẫu</h1>

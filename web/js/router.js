@@ -14,10 +14,14 @@ export const routes = {
   'gioi-thieu': about,
 };
 
+function safeDecode(s) {
+  try { return decodeURIComponent(s); } catch { return s; }
+}
+
 export function parseHash(hash) {
   const parts = String(hash || '').replace(/^#\/?/, '').split('/').filter(Boolean);
   const name = parts[0] && routes[parts[0]] ? parts[0] : DEFAULT_ROUTE;
-  return { name, params: parts.slice(1).map(decodeURIComponent) };
+  return { name, params: parts.slice(1).map(safeDecode) };
 }
 
 export function startRouter(container) {

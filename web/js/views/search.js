@@ -14,7 +14,7 @@ export function reportHtml(wf) {
   const status = computeStatus(wf);
   const score = computeScore(wf);
   const rows = CHECK_KEYS.map((k) => {
-    const c = wf.checks[k] || {};
+    const c = wf.checks?.[k] || {};
     return `<li class="check"><div class="check-head"><b>${esc(CHECK_LABELS[k])}</b><span class="pts">${esc(c.points ?? 0)}/${MAX_POINTS[k]}</span></div>
       <div class="check-meta">Nguồn: ${esc(c.source)} · Ngày: ${esc(c.date)}</div>
       <div>${esc(c.result)}</div></li>`;
@@ -31,7 +31,7 @@ export function reportHtml(wf) {
   return `<article class="report" data-wf="${esc(wf.id)}">
     <section class="card">
       ${statusPill(status)}
-      <h1>${esc(wf.name)}</h1>
+      <h1>${esc(wf.name || wf.domain || wf.id || 'Chưa có tên')}</h1>
       <p class="muted">${esc(wf.domain)}${wf.owner ? ' · ' + esc(wf.owner) : ''}</p>
       <div class="score"><b>${score}</b>/100</div>
       <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}"><i style="width:${score}%"></i></div>
@@ -40,7 +40,7 @@ export function reportHtml(wf) {
     ${suspect}
     <section class="card"><h2>5 mục kiểm tra</h2><ul class="checks">${rows}</ul></section>
     ${insp}
-    <section class="card ai"><h2>Gợi ý AI</h2><p>${esc(wf.ai)}</p>
+    <section class="card ai"><h2>Gợi ý AI</h2><p>${esc(wf.ai || 'Chưa có gợi ý AI cho hồ sơ này.')}</p>
       <p class="note">Chỉ tham khảo, không cộng điểm, không đổi mức.</p></section>
     <section class="card"><h2>Khiếu nại</h2>
       <p>Nếu thấy thông tin chưa đúng, bạn có thể gửi khiếu nại. Quản trị viên sẽ xem xét và quyết định; khiếu nại không tự đổi trạng thái.</p>
