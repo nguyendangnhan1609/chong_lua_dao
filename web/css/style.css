@@ -196,3 +196,6 @@ img, svg { max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   main > *, .card, .qcard, .vbadge { animation: none !important; transition: none !important; transform: none !important; }
 }
+
+/* ---- T6: vùng bấm link "Thử nhanh" ở màn Giới thiệu ---- */
+.quick-link { display: inline-flex; align-items: center; min-height: 40px; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; }
