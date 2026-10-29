@@ -199,3 +199,15 @@ img, svg { max-width: 100%; }
 
 /* ---- T6: vùng bấm link "Thử nhanh" ở màn Giới thiệu ---- */
 .quick-link { display: inline-flex; align-items: center; min-height: 40px; max-width: 100%; box-sizing: border-box; overflow-wrap: anywhere; }
+
+/* ---- T8: khối thông tin bổ sung (giả lập) ---- */
+.intel, .intel .card { min-width: 0; }
+.intel .tag { display: inline-block; font-size: 14px; font-weight: 600; padding: 2px 8px; border-radius: 8px; background: #eef2ff; color: var(--blue-700); vertical-align: middle; }
+.intel .kv { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px 12px; margin: 0; font-size: 14px; }
+.intel .kv dt { font-weight: 600; margin-top: 8px; }
+.intel .kv dd { margin: 0; overflow-wrap: anywhere; }
+@media (min-width: 560px) { .intel .kv { grid-template-columns: 200px minmax(0, 1fr); } .intel .kv dt { margin-top: 0; } }
+.intel li, .intel p { overflow-wrap: anywhere; font-size: 14px; }
+.intel .ev-bad { border-left: 4px solid #d97706; padding-left: 8px; }
+.intel .ev-good { border-left: 4px solid #16a34a; padding-left: 8px; }
+.intel a[data-fake] { display: inline-flex; align-items: center; min-height: 40px; }

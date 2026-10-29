@@ -3,6 +3,7 @@ import { getAll, getById, update, addLog } from '../store.js';
 import { CHECK_KEYS, CHECK_LABELS, MAX_POINTS, STATUS_LABELS, computeScore, computeStatus } from '../scoring.js';
 import { esc, suggest, resolve } from '../search-util.js';
 import { badgeSvg } from '../components/badge.js';
+import { getIntel, looksLikeQuery } from '../intel.js';
 
 const REASONS = ['Giả mạo thương hiệu / tên gần giống', 'Thông tin liên hệ không đúng', 'Yêu cầu chuyển tiền bất thường', 'Lý do khác'];
 
@@ -40,6 +41,7 @@ export function reportHtml(wf) {
     ${suspect}
     <section class="card"><h2>5 mục kiểm tra</h2><ul class="checks">${rows}</ul></section>
     ${insp}
+    ${intelHtml(wf.domain || wf.name)}
     <section class="card ai"><h2>Gợi ý AI</h2><p>${esc(wf.ai || 'Chưa có gợi ý AI cho hồ sơ này.')}</p>
       <p class="note">Chỉ tham khảo, không cộng điểm, không đổi mức.</p></section>
     <section class="card"><h2>Khiếu nại</h2>
@@ -49,14 +51,44 @@ export function reportHtml(wf) {
   </article>`;
 }
 
+
+const TONE = { good: 'Tốt', bad: 'Phản ánh xấu', neutral: 'Trung tính' };
+const yn = (v, a, b) => (v ? a : b);
+
+export function intelHtml(query) {
+  const t = getIntel(query);
+  const w = t.whois, rp = t.reputation, ph = t.phone;
+  const ev = rp.evidence.map((e) => `<li class="ev ev-${esc(e.tone)}"><b>${esc(e.title)}</b> <span class="tag">${esc(TONE[e.tone])}</span>
+    <div class="check-meta">${esc(e.source)} · ${esc(e.date)}</div><div>${esc(e.snippet)}</div><a href="#" data-fake>Xem nguồn (liên kết giả)</a></li>`).join('');
+  const chk = t.extraChecks.map((c) => `<li class="check xcheck"><div class="check-head"><b>${esc(c.label)}</b><span class="pts">${esc(c.result)}</span></div>
+    <div class="check-meta">Nguồn: ${esc(c.source)} · Ngày: ${esc(c.date)}</div><div>${esc(c.detail)}</div></li>`).join('');
+  return `<div class="intel" data-intel>
+    <section class="card"><h2>Thông tin sở hữu tên miền <span class="tag">Giả lập</span></h2><dl class="kv">
+      <dt>Chủ sở hữu</dt><dd>${esc(w.owner)}</dd><dt>Nhà đăng ký</dt><dd>${esc(w.registrar)}</dd>
+      <dt>Ngày tạo</dt><dd>${esc(w.created)}</dd><dt>Ngày hết hạn</dt><dd>${esc(w.expires)}</dd>
+      <dt>Quốc gia máy chủ</dt><dd>${esc(w.country)}</dd><dt>SSL</dt><dd>${esc(w.ssl)}</dd></dl></section>
+    <section class="card"><h2>Danh tiếng trên mạng, AI tổng hợp <span class="tag">Giả lập</span></h2>
+      <p>Bài tốt: <b>${rp.good}</b> · Phản ánh xấu: <b>${rp.bad}</b> · Trung tính: <b>${rp.neutral}</b></p>
+      <p>${esc(rp.verdict)}</p><ul class="checks">${ev}</ul>
+      <p class="note">Chỉ tham khảo, AI có thể sai, hãy kiểm chứng nguồn. Không cộng điểm, không đổi mức.</p></section>
+    <section class="card"><h2>Số điện thoại liên hệ <span class="tag">Giả lập</span></h2><ul>
+      <li>Công khai trên trang: <b>${yn(ph.published, 'Có công khai', 'Không công khai')}</b></li>
+      <li>Xác thực (OTP/gọi lại): <b>${yn(ph.verified, 'Đã xác thực', 'Chưa xác thực')}</b></li>
+      <li>Khớp hồ sơ doanh nghiệp: <b>${yn(ph.matchesProfile, 'Khớp', 'Không khớp / chưa có hồ sơ')}</b></li></ul></section>
+    <section class="card"><h2>Kiểm tra bổ sung <span class="tag">Giả lập</span></h2>
+      <p class="note">Tham khảo, không cộng điểm. Ký hiệu: ✓ ổn, ! cần chú ý, – chưa rõ.</p><ul class="checks">${chk}</ul></section>
+  </div>`;
+}
+
 export function unknownHtml(query) {
+  const extra = looksLikeQuery(query) ? intelHtml(query) : '';
   return `<article class="report"><section class="card">
     ${statusPill('unverified')}
     <h1>${esc(query)}</h1>
     <p>Chưa có trong dữ liệu ChínhChủ nên được xem là <b>Chưa xác thực</b>. Điều này không có nghĩa là không đáng tin; chỉ là chưa được kiểm tra.</p>
     <h2>Dành cho doanh nghiệp</h2>
     <p>Nếu đây là website/fanpage của bạn, hãy đăng ký để được xác thực và nhận huy hiệu.</p>
-    <a class="btn" href="#/doanh-nghiep">Đăng ký xác thực</a></section></article>`;
+    <a class="btn" href="#/doanh-nghiep">Đăng ký xác thực</a></section>${extra}</article>`;
 }
 
 function complaintForm(slot, wf, article) {
@@ -84,7 +116,14 @@ function complaintForm(slot, wf, article) {
 function showReport(box, query) {
   const r = resolve(getAll(), query);
   if (r.type === 'empty') { box.innerHTML = ''; return; }
-  if (r.type === 'none') { box.innerHTML = unknownHtml(query); return; }
+  if (r.type === 'none') {
+    const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!looksLikeQuery(query) || reduce) { box.innerHTML = unknownHtml(query); return; }
+    box.innerHTML = '<section class="card" role="status">Đang tìm trên web… (giả lập)</section>';
+    const token = (box._tk = (box._tk || 0) + 1);
+    setTimeout(() => { if (box._tk === token) box.innerHTML = unknownHtml(query); }, 1000);
+    return;
+  }
   if (r.type === 'multiple') {
     box.innerHTML = `<section class="card"><h2>Có nhiều kết quả, hãy chọn một</h2><ul class="pick">${r.matches.map((w) =>
       `<li><a href="#/tra-cuu/${encodeURIComponent(w.id)}"><b>${esc(w.name)}</b><span>${esc(w.domain)}</span></a></li>`).join('')}</ul></section>`;
