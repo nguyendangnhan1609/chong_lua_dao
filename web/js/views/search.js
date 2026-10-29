@@ -148,7 +148,8 @@ export function render(container, params = []) {
     </form>
     <div data-result></div>
     <section class="card quick"><h2>Thử nhanh</h2><ul class="pick">${list.slice(0, 6).map((w) =>
-      `<li><a href="#/tra-cuu/${encodeURIComponent(w.id)}"><b>${esc(w.name)}</b><span>${esc(w.domain)}</span></a></li>`).join('')}</ul></section>`;
+      `<li><a href="#/tra-cuu/${encodeURIComponent(w.id)}"><b>${esc(w.name)}</b><span>${esc(w.domain)}</span></a></li>`).join('')}</ul></section>
+    <section class="card"><h2>Kiểm tra tick</h2><p>Thấy tick xanh trên một trang và muốn biết có thật không?</p><a class="btn" href="#/kiem-tra-tick">Kiểm tra tick</a></section>`;
   container.append(sec);
   const input = sec.querySelector('#q');
   const sug = sec.querySelector('#sug');

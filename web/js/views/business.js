@@ -2,9 +2,11 @@
 import { getAll, getById, add, update, addLog, getSelectedId, setSelectedId } from '../store.js';
 import { CHECK_KEYS, CHECK_LABELS, MAX_POINTS, STATUS_LABELS, computeScore, computeStatus } from '../scoring.js';
 import { esc } from '../search-util.js';
-import { badgeSvg, badgeLink } from '../components/badge.js';
+import { badgeSvg } from '../components/badge.js';
+import { liveBadgeHtml, mountLiveBadges } from '../components/live-badge.js';
+import { makeEmbedSnippet, makeEmbedCode, periodOf, secondsToNextPeriod } from '../badge-live.js';
 import {
-  OWNERSHIP_METHODS, validateRegistration, createWf, generateProofCode, proveOwnership, todoList, badgeAvailability, embedCode,
+  OWNERSHIP_METHODS, validateRegistration, createWf, generateProofCode, proveOwnership, todoList, badgeAvailability,
 } from '../business-util.js';
 
 const STEPS = ['Đăng ký', 'Chứng minh sở hữu', 'Theo dõi điểm', 'Huy hiệu'];
@@ -167,15 +169,22 @@ function step4(box) {
       <button type="button" data-goto="2">Xem việc cần làm</button></section>`;
     return;
   }
-  const base = `${location.origin}${location.pathname}`;
-  const code = embedCode(base, wf, av.status);
-  box.innerHTML = `<section class="card"><h2>4. Huy hiệu</h2>
-    <p>Huy hiệu hiện tại của bạn (bấm để xem báo cáo):</p>
-    <p>${badgeLink(av.status, wf.id)}</p>
+  const now = Date.now();
+  const code = makeEmbedSnippet(wf, now);
+  box.innerHTML = `<section class="card"><h2>4. Huy hiệu động</h2>
+    <p>Huy hiệu hiện tại của bạn trên trang ${esc(wf.domain)} (bấm để xem báo cáo ChínhChủ):</p>
+    <p>${liveBadgeHtml(wf, wf.domain, now)}</p>
     <p>Dán đoạn mã sau vào website/fanpage:</p>
     <pre class="code" tabindex="0" data-embed>${esc(code)}</pre>
     <button type="button" data-copy>Sao chép</button>
-    <p class="note" data-copy-msg role="status"></p></section>`;
+    <p class="note" data-copy-msg role="status"></p>
+    <p class="note">Mã ký chu kỳ ${periodOf(now)} (${esc(makeEmbedCode(wf, now).split('.').pop())}), đổi sau khoảng ${Math.ceil(secondsToNextPeriod(now) / 60)} phút. Script tự lấy mã mới, bạn không cần dán lại.</p></section>
+    <section class="card"><h2>Cơ chế chống giả</h2><ul class="todo">
+      <li>Kiểm tra tên miền: tick chỉ hiện khi trang tải từ đúng tên miền đã đăng ký; chép sang trang khác sẽ không hiện.</li>
+      <li>Chữ ký đổi định kỳ (5 phút) và thu hồi có hiệu lực ngay: tick tự chuyển xám.</li>
+      <li>Bấm vào tick luôn mở báo cáo trên ChínhChủ, không thể trỏ sang đích giả.</li></ul>
+    <p class="note">Bản demo giả lập chữ ký; bản thật dùng script ký số và máy chủ kiểm origin.</p></section>`;
+  mountLiveBadges(box);
   box.querySelector('[data-copy]').addEventListener('click', () => {
     const msg = box.querySelector('[data-copy-msg]');
     copyText(code).then(() => { msg.textContent = 'Đã sao chép.'; }, () => { msg.textContent = 'Không sao chép được, hãy chọn đoạn mã và sao chép thủ công.'; });
