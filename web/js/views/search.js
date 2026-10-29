@@ -51,14 +51,13 @@ export function reportHtml(wf) {
   </article>`;
 }
 
-
 const TONE = { good: 'Tốt', bad: 'Phản ánh xấu', neutral: 'Trung tính' };
 const yn = (v, a, b) => (v ? a : b);
 
 export function intelHtml(query) {
   const t = getIntel(query);
   const w = t.whois, rp = t.reputation, ph = t.phone;
-  const ev = rp.evidence.map((e) => `<li class="ev ev-${esc(e.tone)}"><b>${esc(e.title)}</b> <span class="tag">${esc(TONE[e.tone])}</span>
+  const ev = rp.evidence.map((e) => `<li class="ev ev-${esc(e.tone)}"><b>${esc(e.title)}</b> <span class="tag">${esc(TONE[e.tone])}</span> <span class="tag">Giả lập</span>
     <div class="check-meta">${esc(e.source)} · ${esc(e.date)}</div><div>${esc(e.snippet)}</div><a href="#" data-fake>Xem nguồn (liên kết giả)</a></li>`).join('');
   const chk = t.extraChecks.map((c) => `<li class="check xcheck"><div class="check-head"><b>${esc(c.label)}</b><span class="pts">${esc(c.result)}</span></div>
     <div class="check-meta">Nguồn: ${esc(c.source)} · Ngày: ${esc(c.date)}</div><div>${esc(c.detail)}</div></li>`).join('');
@@ -69,6 +68,7 @@ export function intelHtml(query) {
       <dt>Quốc gia máy chủ</dt><dd>${esc(w.country)}</dd><dt>SSL</dt><dd>${esc(w.ssl)}</dd></dl></section>
     <section class="card"><h2>Danh tiếng trên mạng, AI tổng hợp <span class="tag">Giả lập</span></h2>
       <p>Bài tốt: <b>${rp.good}</b> · Phản ánh xấu: <b>${rp.bad}</b> · Trung tính: <b>${rp.neutral}</b></p>
+      <p class="note"><b>Dữ liệu minh họa sinh tự động cho bản demo, KHÔNG phải phản ánh thật về trang này.</b></p>
       <p>${esc(rp.verdict)}</p><ul class="checks">${ev}</ul>
       <p class="note">Chỉ tham khảo, AI có thể sai, hãy kiểm chứng nguồn. Không cộng điểm, không đổi mức.</p></section>
     <section class="card"><h2>Số điện thoại liên hệ <span class="tag">Giả lập</span></h2><ul>

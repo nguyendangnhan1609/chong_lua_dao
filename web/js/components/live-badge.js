@@ -21,7 +21,10 @@ export function liveBadgeHtml(wf, hostDomain, now = Date.now()) {
 }
 
 // Bật đồng hồ cho các huy hiệu trong root. Tự dừng khi root rời khỏi trang; router gọi stopLiveBadges khi đổi route.
+const byRoot = new WeakMap();
 export function mountLiveBadges(root) {
+  const old = byRoot.get(root);
+  if (old) { clearInterval(old); timers.delete(old); }
   const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const tick = () => {
     if (!root.isConnected) { clearInterval(t); timers.delete(t); return; }
@@ -42,5 +45,6 @@ export function mountLiveBadges(root) {
   };
   const t = setInterval(tick, reduce ? 10000 : 1000);
   timers.add(t);
+  byRoot.set(root, t);
   return t;
 }

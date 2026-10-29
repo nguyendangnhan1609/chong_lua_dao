@@ -85,14 +85,15 @@ function hadBadge(wf) {
   if ((wf.grant || 'none') !== 'none') return true;
   const status = computeStatus(wf);
   if (status === 'suspect') return true;
-  return (wf.log || []).some((l) => /thu hồi/i.test(String(l?.text || '')));
+  return wf.revokedAt != null && wf.revokedAt !== false; // cờ đặt khi quản trị thu hồi; dữ liệu cũ thiếu cờ coi như chưa từng có huy hiệu
 }
 
 // Giả lập "quét trang": trả {verdict, reason, domain, wfId?, detail}.
+const SIM = ' (mô phỏng, không quét trang thật)';
 export function scanPage(url, wfs, now = Date.now()) {
   const domain = normalizeDomain(url);
   const list = wfs || [];
-  const mk = (verdict, reason, detail, wfId) => ({ verdict, reason, domain, wfId, detail });
+  const mk = (verdict, reason, detail, wfId) => ({ verdict, reason, domain, wfId, detail: detail + SIM });
   if (!domain) return mk(VERDICT.none, 'empty', 'Chưa nhập địa chỉ trang.');
   const copy = COPY_PAGES[domain];
   if (copy) {

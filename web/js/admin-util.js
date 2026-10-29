@@ -133,6 +133,7 @@ export function applyAction(wf, action, payload = {}, now = new Date()) {
       break;
     case 'revoke':
       w.grant = 'none'; w.pending = false;
+      w.revokedAt = new Date(now).toISOString();
       pushLog(w, action, 'Quản trị thu hồi mức xác thực (về Chưa xác thực)', reason, now);
       break;
     case 'markSuspect':

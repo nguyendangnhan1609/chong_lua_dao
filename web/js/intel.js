@@ -25,7 +25,11 @@ export function hash(str) { // FNV-1a 32-bit
 }
 function rng(seed) { let s = seed || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
 const pad = (n) => String(n).padStart(2, '0');
-const dateFrom = (r, y0, span) => `${y0 + Math.floor(r() * span)}-${pad(1 + Math.floor(r() * 12))}-${pad(1 + Math.floor(r() * 28))}`;
+const MAX_DATE = '2026-10-29'; // không sinh ngày muộn hơn "hôm nay" của bản demo
+const dateFrom = (r, y0, span) => {
+  const d = `${y0 + Math.floor(r() * span)}-${pad(1 + Math.floor(r() * 12))}-${pad(1 + Math.floor(r() * 28))}`;
+  return d > MAX_DATE ? MAX_DATE : d;
+};
 
 export function looksLikeQuery(s) {
   const t = String(s ?? '').trim();

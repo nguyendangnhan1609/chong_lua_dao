@@ -66,5 +66,3 @@ export function render(container) {
   container.append(wrap);
   mountLiveBadges(wrap);
 }
-
-export { COPY_PAGES };

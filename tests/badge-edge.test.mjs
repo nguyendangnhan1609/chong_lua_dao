@@ -38,3 +38,22 @@ test('scanPage: đầu vào rỗng / lạ không ném lỗi', () => {
 test('intel: không phân biệt hoa thường/schema và ổn định', () => {
   assert.deepEqual(getIntel('ABC-Shop.example'), getIntel('https://abc-shop.example/x'));
 });
+
+test('cờ revokedAt: đặt khi thu hồi; dữ liệu cũ thiếu cờ không bị coi là từng có huy hiệu; detail ghi rõ mô phỏng', () => {
+  const wfs = createSampleData();
+  const r = applyAction(get(wfs, 'wf-1'), 'revoke', { reason: 'kiểm thử' });
+  assert.ok(r.wf.revokedAt);
+  const old = { ...get(wfs, 'wf-4'), grant: 'none', log: [{ text: 'Quản trị thu hồi mức xác thực' }] };
+  delete old.revokedAt;
+  const res = scanPage(old.domain, [old], T0);
+  assert.equal(res.verdict, VERDICT.none);
+  assert.match(res.detail, /mô phỏng, không quét trang thật/);
+});
+
+test('intel: mọi ngày sinh ra không muộn hơn 2026-10-29', () => {
+  for (const q of ['a.example', 'b.test', 'cửa hàng xyz', 'shop-123.vn', 'hoanang-shop.example', 'zzz.example', 'q1.example', 'q2.example']) {
+    const t = getIntel(q);
+    const dates = [...t.reputation.evidence.map((e) => e.date), ...t.extraChecks.map((c) => c.date)];
+    for (const d of dates) assert.ok(d <= '2026-10-29', `${q}: ${d}`);
+  }
+});
