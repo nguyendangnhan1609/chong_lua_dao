@@ -14,10 +14,11 @@ function walk(d) {
 }
 const files = walk(WEB);
 
-test('SIMULATED liệt kê đủ 13 mục theo SPEC', () => {
-  assert.equal(SIMULATED.length, 13);
+test('SIMULATED liệt kê đủ 19 mục theo SPEC', () => {
+  assert.equal(SIMULATED.length, 19);
   const keys = ['6 website', 'nguồn chính phủ', 'số điện thoại', 'whois', 'danh sách giả mạo', 'gợi ý ai',
-    'chứng minh quyền sở hữu', 'thanh toán', 'thẩm định', 'khiếu nại', 'đăng nhập', 'huy hiệu tick', 'localstorage'];
+    'chứng minh quyền sở hữu', 'thanh toán', 'thẩm định', 'khiếu nại', 'đăng nhập', 'huy hiệu tick', 'localstorage',
+    'whois/rdap', 'ai tìm kiếm', 'otp', 'kiểm tra bổ sung', 'ký số', 'quét trang'];
   keys.forEach((k, i) => assert.ok(SIMULATED[i].toLowerCase().includes(k), `mục ${i + 1} thiếu "${k}": ${SIMULATED[i]}`));
 });
 

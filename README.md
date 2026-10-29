@@ -42,7 +42,7 @@ Chạy bằng Node.js (không cần cài thêm gói nào). Test kiểm thang đi
 ## Kịch bản demo 5 bước
 
 1. **Tra cứu**: vào "Người dùng", gõ tên hoặc địa chỉ một website mẫu (ví dụ có đuôi `.example`) và xem báo cáo: trạng thái, điểm, từng mục kiểm tra kèm nguồn, ngày và kết quả, phần "Gợi ý AI" (chỉ tham khảo).
-2. **Trang mẫu có tick**: vào menu "Trang mẫu", bấm vào huy hiệu tick của một trang để mở đúng báo cáo của trang đó.
+2. **Trang mẫu và tick động**: vào menu "Trang mẫu" để xem 3 ca: trang thật (tick sống, "xác nhận N giây trước"), trang chép ảnh tick tĩnh (có cảnh báo và nút "Kiểm tra tick"), trang bị thu hồi (tick xám). Công cụ "Kiểm tra tick" (`#/kiem-tra-tick`, mở từ góc nhìn Người dùng) quét địa chỉ trang dán vào. Thu hồi ở Quản trị sẽ làm tick xám ngay.
 3. **Doanh nghiệp đăng ký và chứng minh**: vào "Doanh nghiệp", đăng ký một website/fanpage mới, chọn một cách chứng minh quyền sở hữu (chèn mã, file xác nhận hoặc mã qua email) rồi bấm "Kiểm tra" (giả lập, chờ 1–2 giây). Theo dõi điểm và việc cần làm.
 4. **Quản trị cấp, nâng, thu hồi**: vào "Quản trị", mở hồ sơ vừa đăng ký, xem kết quả kiểm tra tự động, nhập thẩm định thực tế (gọi điện, gặp trực tiếp, minh chứng giả lập), rồi cấp mức thấp, nâng mức cao (khi đủ điều kiện) và thử thu hồi. Mọi thao tác ghi vào nhật ký hồ sơ và phản ánh sang hai góc nhìn còn lại. Nút "Đặt lại dữ liệu mẫu" đưa dữ liệu về ban đầu.
 5. **Giới thiệu demo**: vào "Giới thiệu" để xem giải thích cho người không chuyên, thang điểm, ý nghĩa 4 trạng thái, phần "Thử nhanh luồng đầu-cuối" và danh sách phần giả lập ở cuối trang.
@@ -91,5 +91,13 @@ Nếu đổi cổng bằng `PORT=...`, nhớ sửa `proxy_pass` cho khớp.
 11. Đăng nhập/phân quyền
 12. Huy hiệu tick nhúng
 13. Lưu trữ (chỉ localStorage)
+14. WHOIS/RDAP đầy đủ (chủ sở hữu, nhà đăng ký, SSL)
+15. AI tìm kiếm danh tiếng trên web (bài tốt/xấu, bằng chứng)
+16. Xác thực SĐT bằng mã OTP/gọi lại
+17. Kiểm tra bổ sung (SPF/DMARC, chuyển hướng, tài khoản nhận tiền…)
+18. Ký số huy hiệu động (chữ ký HMAC giả, đổi mỗi 5 phút)
+19. Quét trang kiểm tra tick (trang và mã nhúng giả lập)
+
+Hướng làm thật cho phần tick: script ký số kiểm origin ở máy chủ, extension trình duyệt, quét định kỳ.
 
 Các tên và miền trong dữ liệu mẫu là hư cấu, đuôi `.example` hoặc `.test`, không liên quan đến thương hiệu thật.

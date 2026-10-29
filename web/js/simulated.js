@@ -13,4 +13,10 @@ export const SIMULATED = [
   'Đăng nhập/phân quyền',
   'Huy hiệu tick nhúng',
   'Lưu trữ (chỉ localStorage)',
+  'WHOIS/RDAP đầy đủ (chủ sở hữu, nhà đăng ký, SSL)',
+  'AI tìm kiếm danh tiếng trên web (bài tốt/xấu, bằng chứng)',
+  'Xác thực SĐT bằng mã OTP/gọi lại',
+  'Kiểm tra bổ sung (SPF/DMARC, chuyển hướng, tài khoản nhận tiền…)',
+  'Ký số huy hiệu động (chữ ký HMAC giả, đổi mỗi 5 phút)',
+  'Quét trang kiểm tra tick (trang và mã nhúng giả lập)',
 ];

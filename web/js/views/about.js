@@ -76,6 +76,16 @@ export function render(container) {
   container.append(card('Tick cần gia hạn hằng năm',
     el('p', 'Trong hệ thống thật, tick sẽ cần được gia hạn mỗi năm để thông tin luôn mới. Bản demo chưa có hạn tick.')));
 
+  container.append(card('Tick xanh chống giả mạo',
+    el('p', 'Tick là huy hiệu "sống": chỉ hiện đúng khi tải từ tên miền đã đăng ký, có giờ xác nhận chạy theo thời gian, chữ ký đổi định kỳ và thu hồi có hiệu lực ngay. Bấm vào tick luôn mở báo cáo trên ChínhChủ. Ảnh tick chép về chỉ là ảnh tĩnh.'),
+    (() => { const a = el('a', 'Kiểm tra tick trên một trang', 'quick-link'); a.href = '#/kiem-tra-tick'; return a; })()));
+
+  container.append(card('Hướng làm thật (hiện chỉ giả lập)', list([
+    'Script ký số: trang nhúng một script, máy chủ ký mã theo chu kỳ và kiểm tra origin/referrer trước khi trả tick.',
+    'Extension trình duyệt: tự kiểm tra tick trên mọi trang và cảnh báo khi chỉ là ảnh tĩnh.',
+    'Quét định kỳ: hệ thống quét lại các trang đã đăng ký, phát hiện tick bị chép hoặc gỡ.',
+  ])));
+
   const quick = list(STEPS.map(([t, href, d]) => {
     const w = el('span');
     const a = el('a', t, 'quick-link'); a.href = href; a.style.fontWeight = '600';
